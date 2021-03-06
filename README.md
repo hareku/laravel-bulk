@@ -2,6 +2,8 @@
 
 `laravel-bulk` provides functions that execute bulk insert/update.
 
+Packagist: https://packagist.org/packages/hareku/laravel-bulk
+
 ## Installation
 
 Composer: `composer require hareku/laravel-bulk`.
