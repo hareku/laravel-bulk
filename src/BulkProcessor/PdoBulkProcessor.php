@@ -82,7 +82,7 @@ class PdoBulkProcessor implements BulkProcessor
         $sql = "UPDATE `{$table}` SET";
 
         foreach ($valuesByColumn as $column => $valuesByRecordKey) {
-            $sql .= " `{$column}` = CASE(";
+            $sql .= " `{$column}` = (CASE";
             foreach ($valuesByRecordKey as $recordKey => $value) {
                 foreach ($indices as $indexKey => $index) {
                     $sql .= $indexKey == 0 ? ' WHEN ' : ' AND ';
