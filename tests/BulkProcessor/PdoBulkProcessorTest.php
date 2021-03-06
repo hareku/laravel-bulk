@@ -7,6 +7,7 @@ use Mockery;
 use Hareku\Bulk\BulkProcessor\PdoBulkProcessor;
 use PDO;
 use PDOStatement;
+use InvalidArgumentException;
 
 class PdoBulkProcessorTest extends TestCase
 {
@@ -25,6 +26,24 @@ class PdoBulkProcessorTest extends TestCase
 
         $builder = new PdoBulkProcessor($pdoMock);
         $query = $builder->insert('tbl', ['name', 'age'], [['john', 22], ['james', 23]]);
+    }
+
+    public function testInsertWithEmptyColumns()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->insert('tbl', [], [['john', 22]]);
+    }
+
+    public function testInsertWithEmptyRecords()
+    {
+        $pdoMock = Mockery::mock(PDO::class);
+        $pdoMock->shouldReceive('prepare')->times(0);
+
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->insert('tbl', ['name', 'age'], []);
     }
 
     public function testUpdate()
