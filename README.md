@@ -22,8 +22,7 @@ Composer: `composer require hareku/laravel-bulk`.
 use Hareku\Bulk\Facades\EloquentBulk;
 
 // EloquentBulk automatically resolves the table name,
-// and fills `created_at` and `updated_at` columns
-// from the given model instance.
+// and fills `created_at` and `updated_at` columns.
 $model = new User;
 
 $columns = ['name', 'age'];
