@@ -28,5 +28,12 @@
   "require-dev": {
     "phpunit/phpunit": "^9.5",
     "mockery/mockery": "^1.4"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Hareku\\Bulk\\BulkServiceProvider"
+      ]
+    }
   }
 }
