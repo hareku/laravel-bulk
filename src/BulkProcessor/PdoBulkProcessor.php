@@ -80,7 +80,6 @@ class PdoBulkProcessor implements BulkProcessor
         }
 
         $sql = "UPDATE `{$table}` SET";
-        $params = [];
 
         foreach ($valuesByColumn as $column => $valuesByRecordKey) {
             $sql .= " `{$column}` = CASE(";
@@ -89,8 +88,7 @@ class PdoBulkProcessor implements BulkProcessor
                     $sql .= $indexKey == 0 ? ' WHEN ' : ' AND ';
                     $sql .= "`{$index}` = :key_{$recordKey}_index_{$indexKey}";
                 }
-                $sql .= ' THEN ?';
-                $params[] = $value;
+                $sql .= " THEN :key_{$recordKey}_column_{$column}";
             }
             $sql .= ')';
         }
@@ -114,8 +112,13 @@ class PdoBulkProcessor implements BulkProcessor
             foreach ($indices as $indexKey => $index) {
                 $statement->bindValue(":key_{$recordKey}_index_{$indexKey}", $record[$index]);
             }
+            foreach ($record as $column => $value) {
+                if(! in_array($column, $indices)) {
+                    $statement->bindValue(":key_{$recordKey}_column_{$column}", $value);
+                }
+            }
         }
 
-        $statement->execute($params);
+        $statement->execute();
     }
 }
