@@ -137,4 +137,22 @@ class PdoBulkProcessorTest extends TestCase
             ],
         ]);
     }
+
+    public function testUpdateWithEmptyIndices()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->update('tbl', [], [['name' => 'john']]);
+    }
+
+    public function testUpdateWithEmptyRecords()
+    {
+        $pdoMock = Mockery::mock(PDO::class);
+        $pdoMock->shouldReceive('prepare')->times(0);
+
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->update('tbl', ['name'], []);
+    }
 }
