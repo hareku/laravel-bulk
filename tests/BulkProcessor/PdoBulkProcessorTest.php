@@ -86,4 +86,36 @@ class PdoBulkProcessorTest extends TestCase
             ],
         ]);
     }
+
+    public function testUpdateWithSparseRecords()
+    {
+        $statementMock = Mockery::mock(PDOStatement::class);
+        $statementMock->shouldReceive('execute')
+            ->with([1, 'john', 2, 'james', 1, 22, 1, 2])
+            ->once();
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $pdoMock->shouldReceive('prepare')
+            ->with(
+                'UPDATE `tbl` SET'
+                . ' `name` = (CASE WHEN `id` = ? THEN ? WHEN `id` = ? THEN ? ELSE `name` END)'
+                . ', `age` = (CASE WHEN `id` = ? THEN ? ELSE `age` END)'
+                . ' WHERE `id` IN (?,?);'
+            )
+            ->once()
+            ->andReturn($statementMock);
+
+        $builder = new PdoBulkProcessor($pdoMock);
+        $query = $builder->update('tbl', ['id'], [
+            [
+                'id' => 1,
+                'name' => 'john',
+                'age' => 22,
+            ],
+            [
+                'id' => 2,
+                'name' => 'james',
+            ],
+        ]);
+    }
 }
