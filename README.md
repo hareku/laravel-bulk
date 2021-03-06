@@ -93,8 +93,9 @@ dump(User::all());
 
 ```php
 
-EloquentBulk::insert($tableName, $columns, $records);
+use Hareku\Bulk\Facades\BulkProcessor;
 
-EloquentBulk::update($tableName, $indices, $records);
+BulkProcessor::insert($tableName, $columns, $records);
+BulkProcessor::update($tableName, $indices, $records);
 
 ```
