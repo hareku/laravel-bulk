@@ -43,27 +43,50 @@ class PdoBulkProcessor implements BulkProcessor
     public function update(string $table, array $indices, array $records): void
     {
         $sql = "UPDATE `{$table}`";
-        $recordValues = [];
-        $mergedIndices = [];
+
+        $valuesByIndex = []; // for WHERE IN
+        $valuesByColumn = [];
 
         foreach ($records as $recordKey => $record) {
-            $recordIndices = [];
             foreach ($indices as $index) {
                 if(! array_key_exists($index, $record)) {
                     // TODO: throw argument error
                 }
-                $recordIndices[] = $record[$index];
-                $mergedIndices[$index][] = $record[$index];
+                $valuesByIndex[$index][] = $record[$index];
             }
 
             foreach ($record as $column => $value) {
-                $recordValues[$column][$recordKey] = $value;
+                if(! in_array($column, $indices, true)) {
+                    $valuesByColumn[$column][$recordKey] = $value;
+                }
             }
         }
 
-        $sql = "UPDATE `{$table}`";
-        foreach ($recordValues as $column => $recordValues) {
-            $sql .= " SET `{$column}` = CASE(";
+        $sql = "UPDATE `{$table}` SET";
+        $params = [];
+
+        foreach ($valuesByColumn as $column => $valuesByRecordKey) {
+            $sql .= " `{$column}` = CASE(";
+            foreach ($valuesByRecordKey as $recordKey => $value) {
+                foreach ($indices as $indexKey => $index) {
+                    $sql .= $indexKey == 0 ? ' WHEN ' : ' AND ';
+                    $sql .= "`{$index}` = :key_{$recordKey}_index_{$indexKey}";
+                }
+                $sql .= ' THEN ?';
+                $params[] = $value;
+            }
+            $sql .= ')';
         }
+        $sql .= ';';
+
+        $statement = $this->pdo->prepare($sql);
+
+        foreach ($records as $recordKey => $record) {
+            foreach ($indices as $indexKey => $index) {
+                $statement->bindValue(":key_{$recordKey}_index_{$indexKey}", $record[$index]);
+            }
+        }
+
+        $statement->execute($params);
     }
 }

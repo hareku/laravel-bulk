@@ -44,15 +44,9 @@ class PdoBulkProcessorTest extends TestCase
         $pdoMock = Mockery::mock(PDO::class);
         $pdoMock->shouldReceive('prepare')
             ->with(
-                'UPDATE `tbl`'
-                . ' SET `name` = CASE('
-                    . 'WHEN `id` = :key_0_index_0 THEN ? '
-                    . 'WHEN `id` = :key_1_index_0 THEN ? '
-                    . 'ELSE `name` END)'
-                . ' SET `age` = CASE('
-                    . 'WHEN `id` = :key_0_index_0 THEN ? '
-                    . 'WHEN `id` = :key_1_index_0 THEN ? '
-                    . 'ELSE `age` END);'
+                'UPDATE `tbl` SET'
+                . ' `name` = CASE( WHEN `id` = :key_0_index_0 THEN ? WHEN `id` = :key_1_index_0 THEN ?)'
+                . ' `age` = CASE( WHEN `id` = :key_0_index_0 THEN ? WHEN `id` = :key_1_index_0 THEN ?);'
             )
             ->once()
             ->andReturn($statementMock);

@@ -3,7 +3,7 @@ FROM php:8.0-cli
 # Install dependencies
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    git \
+    git ssh \
   && rm -rf /var/lib/apt/lists/*
 
 # Install composer
