@@ -80,15 +80,18 @@ class PdoBulkProcessor implements BulkProcessor
         }
 
         $sql = "UPDATE `{$table}` SET";
+        $params = [];
 
         foreach ($valuesByColumn as $column => $valuesByRecordKey) {
             $sql .= " `{$column}` = (CASE";
             foreach ($valuesByRecordKey as $recordKey => $value) {
                 foreach ($indices as $indexKey => $index) {
                     $sql .= $indexKey == 0 ? ' WHEN ' : ' AND ';
-                    $sql .= "`{$index}` = :key_{$recordKey}_index_{$indexKey}";
+                    $sql .= "`{$index}` = ?";
+                    $params[] = $records[$recordKey][$index];
                 }
-                $sql .= " THEN :key_{$recordKey}_column_{$column}";
+                $sql .= " THEN ?";
+                $params[] = $value;
             }
             $sql .= " ELSE `{$column}` END),";
         }
@@ -97,29 +100,16 @@ class PdoBulkProcessor implements BulkProcessor
         foreach ($indices as $indexKey => $index) {
             $sql .= " WHERE `{$index}` IN (";
             foreach ($records as $recordKey => $record) {
-                if($recordKey > 0) {
-                    $sql .= ',';
-                }
-                $sql .= ":key_{$recordKey}_index_{$indexKey}";
+                $sql .= "?,";
+                $params[] = $record[$index];
             }
-            $sql .= ')';
+            $sql = rtrim($sql, ',') . ')';
         }
 
         $sql .= ';';
 
         $statement = $this->pdo->prepare($sql);
 
-        foreach ($records as $recordKey => $record) {
-            foreach ($indices as $indexKey => $index) {
-                $statement->bindValue(":key_{$recordKey}_index_{$indexKey}", $record[$index]);
-            }
-            foreach ($record as $column => $value) {
-                if(! in_array($column, $indices)) {
-                    $statement->bindValue(":key_{$recordKey}_column_{$column}", $value);
-                }
-            }
-        }
-
-        $statement->execute();
+        $statement->execute($params);
     }
 }

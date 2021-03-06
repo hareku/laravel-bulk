@@ -30,31 +30,17 @@ class PdoBulkProcessorTest extends TestCase
     public function testUpdate()
     {
         $statementMock = Mockery::mock(PDOStatement::class);
-
-        $statementMock->shouldReceive('bindValue')
-            ->with(':key_0_index_0', 1)->once();
-        $statementMock->shouldReceive('bindValue')
-            ->with(':key_1_index_0', 2)->once();
-
-        $statementMock->shouldReceive('bindValue')
-            ->with(':key_0_column_name', 'john')->once();
-        $statementMock->shouldReceive('bindValue')
-            ->with(':key_1_column_name', 'james')->once();
-
-        $statementMock->shouldReceive('bindValue')
-            ->with(':key_0_column_age', 22)->once();
-        $statementMock->shouldReceive('bindValue')
-            ->with(':key_1_column_age', 23)->once();
-
-        $statementMock->shouldReceive('execute')->once();
+        $statementMock->shouldReceive('execute')
+            ->with([1, 'john', 2, 'james', 1, 22, 2, 23, 1, 2])
+            ->once();
 
         $pdoMock = Mockery::mock(PDO::class);
         $pdoMock->shouldReceive('prepare')
             ->with(
                 'UPDATE `tbl` SET'
-                . ' `name` = (CASE WHEN `id` = :key_0_index_0 THEN :key_0_column_name WHEN `id` = :key_1_index_0 THEN :key_1_column_name ELSE `name` END)'
-                . ', `age` = (CASE WHEN `id` = :key_0_index_0 THEN :key_0_column_age WHEN `id` = :key_1_index_0 THEN :key_1_column_age ELSE `age` END)'
-                . ' WHERE `id` IN (:key_0_index_0,:key_1_index_0);'
+                . ' `name` = (CASE WHEN `id` = ? THEN ? WHEN `id` = ? THEN ? ELSE `name` END)'
+                . ', `age` = (CASE WHEN `id` = ? THEN ? WHEN `id` = ? THEN ? ELSE `age` END)'
+                . ' WHERE `id` IN (?,?);'
             )
             ->once()
             ->andReturn($statementMock);
