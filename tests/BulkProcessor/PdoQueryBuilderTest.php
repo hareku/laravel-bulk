@@ -24,7 +24,7 @@ class PdoBulkProcessorTest extends TestCase
             ->andReturn($statementMock);
 
         $builder = new PdoBulkProcessor($pdoMock);
-        $query = $builder->insert("tbl", ['name', 'age'], [['john', 22], ['james', 23]]);
+        $query = $builder->insert('tbl', ['name', 'age'], [['john', 22], ['james', 23]]);
     }
 
     public function testUpdate()
@@ -46,13 +46,14 @@ class PdoBulkProcessorTest extends TestCase
             ->with(
                 'UPDATE `tbl` SET'
                 . ' `name` = CASE( WHEN `id` = :key_0_index_0 THEN ? WHEN `id` = :key_1_index_0 THEN ?)'
-                . ' `age` = CASE( WHEN `id` = :key_0_index_0 THEN ? WHEN `id` = :key_1_index_0 THEN ?);'
+                . ' `age` = CASE( WHEN `id` = :key_0_index_0 THEN ? WHEN `id` = :key_1_index_0 THEN ?)'
+                . ' WHERE `id` IN (:key_0_index_0,:key_1_index_0);'
             )
             ->once()
             ->andReturn($statementMock);
 
         $builder = new PdoBulkProcessor($pdoMock);
-        $query = $builder->update("tbl", ['id'], [
+        $query = $builder->update('tbl', ['id'], [
             [
                 'id' => 1,
                 'name' => 'john',

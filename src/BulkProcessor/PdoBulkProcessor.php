@@ -3,24 +3,33 @@
 namespace Hareku\Bulk\BulkProcessor;
 
 use PDO;
+use InvalidArgumentException;
 
 class PdoBulkProcessor implements BulkProcessor
 {
     /**
+     * The PDO instance.
+     *
+     * @var PDO
+     */
+    protected $pdo;
+
+    /**
      * @return void
      */
-    public function __construct(protected PDO $pdo)
+    public function __construct(PDO $pdo)
     {
-        //
+        $this->pdo = $pdo;
     }
 
     public function insert(string $table, array $columns, array $records): void
     {
         if(count($columns) == 0) {
-            // todo: throw argument error
+            throw new InvalidArgumentException('Columns must not be empty.');
         }
+
         if(count($records) == 0) {
-            // todo: throw argument error
+            return;
         }
 
         $sql = "INSERT INTO `{$table}`";
@@ -42,15 +51,23 @@ class PdoBulkProcessor implements BulkProcessor
 
     public function update(string $table, array $indices, array $records): void
     {
-        $sql = "UPDATE `{$table}`";
+        if(count($indices) == 0) {
+            throw new InvalidArgumentException('Indices must not be empty.');
+        }
 
-        $valuesByIndex = []; // for WHERE IN
+        if(count($records) == 0) {
+            return;
+        }
+
         $valuesByColumn = [];
-
         foreach ($records as $recordKey => $record) {
+            if(! is_array($record)) {
+                throw new InvalidArgumentException('A record must be an array, ' . gettype($record) . ' given.');
+            }
+
             foreach ($indices as $index) {
                 if(! array_key_exists($index, $record)) {
-                    // TODO: throw argument error
+                    throw new InvalidArgumentException("A record must contain a given index `{$index}`.");
                 }
                 $valuesByIndex[$index][] = $record[$index];
             }
@@ -77,6 +94,18 @@ class PdoBulkProcessor implements BulkProcessor
             }
             $sql .= ')';
         }
+
+        foreach ($indices as $indexKey => $index) {
+            $sql .= " WHERE `{$index}` IN (";
+            foreach ($records as $recordKey => $record) {
+                if($recordKey > 0) {
+                    $sql .= ',';
+                }
+                $sql .= ":key_{$recordKey}_index_{$indexKey}";
+            }
+            $sql .= ')';
+        }
+
         $sql .= ';';
 
         $statement = $this->pdo->prepare($sql);
