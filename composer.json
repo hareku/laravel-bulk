@@ -1,0 +1,39 @@
+{
+  "name": "hareku/laravel-bulk",
+  "type": "library",
+  "license": "MIT",
+  "description": "The Laravel package for bulk insert/update.",
+  "authors": [
+    {
+      "name": "hareku",
+      "email": "hareku908@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Hareku\\Bulk\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^7.3|^8.0",
+    "illuminate/contracts": "^8.0",
+    "illuminate/database": "^8.0",
+    "illuminate/support": "^8.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5",
+    "mockery/mockery": "^1.4"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Hareku\\Bulk\\BulkServiceProvider"
+      ]
+    }
+  }
+}
