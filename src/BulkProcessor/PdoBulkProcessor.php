@@ -97,13 +97,19 @@ class PdoBulkProcessor implements BulkProcessor
         }
         $sql = rtrim($sql, ',');
 
-        foreach ($indices as $indexKey => $index) {
-            $sql .= " WHERE `{$index}` IN (";
-            foreach ($records as $recordKey => $record) {
+        $sql .= ' WHERE ';
+        foreach ($indices as $i => $index) {
+            if($i > 0) {
+                $sql .= " AND ";
+            }
+
+            $sql .= "`{$index}` IN (";
+            foreach ($records as $record) {
                 $sql .= "?,";
                 $params[] = $record[$index];
             }
-            $sql = rtrim($sql, ',') . ')';
+            $sql = rtrim($sql, ',');
+            $sql .= ')';
         }
 
         $sql .= ';';

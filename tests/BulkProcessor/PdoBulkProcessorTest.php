@@ -59,4 +59,31 @@ class PdoBulkProcessorTest extends TestCase
             ],
         ]);
     }
+
+    public function testUpdateWithMultipleIndices()
+    {
+        $statementMock = Mockery::mock(PDOStatement::class);
+        $statementMock->shouldReceive('execute')
+            ->with([1, 'john', 22, 1, 'john'])
+            ->once();
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $pdoMock->shouldReceive('prepare')
+            ->with(
+                'UPDATE `tbl` SET'
+                . ' `age` = (CASE WHEN `id` = ? AND `name` = ? THEN ? ELSE `age` END)'
+                . ' WHERE `id` IN (?) AND `name` IN (?);'
+            )
+            ->once()
+            ->andReturn($statementMock);
+
+        $builder = new PdoBulkProcessor($pdoMock);
+        $query = $builder->update('tbl', ['id', 'name'], [
+            [
+                'id' => 1,
+                'name' => 'john',
+                'age' => 22,
+            ],
+        ]);
+    }
 }
