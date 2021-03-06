@@ -24,7 +24,7 @@ class ConcreteEloquentBulk implements EloquentBulk
 
     public function insert(Model $model, array $columns, array $records): void
     {
-        if($model->useTimestamps()) {
+        if($model->usesTimestamps()) {
             $timestamp = $model->freshTimestamp()->format($model->getDateFormat());
 
             $columns[] = $model->getCreatedAtColumn();
@@ -40,7 +40,7 @@ class ConcreteEloquentBulk implements EloquentBulk
 
     public function update(Model $model, array $indices, array $records): void
     {
-        if($model->useTimestamps()) {
+        if($model->usesTimestamps()) {
             $timestamp = $model->freshTimestamp()->format($model->getDateFormat());
 
             $column = $model->getUpdatedAtColumn();

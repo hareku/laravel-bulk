@@ -15,7 +15,7 @@ class ConcreteEloquentBulkTest extends TestCase
     {
         $modelMock = Mockery::mock(Model::class);
 
-        $modelMock->shouldReceive('useTimestamps')->once()->andReturn(true);
+        $modelMock->shouldReceive('usesTimestamps')->once()->andReturn(true);
         $modelMock->shouldReceive('freshTimestamp')->once()->andReturn(new \DateTime('2020-05-10'));
         $modelMock->shouldReceive('getDateFormat')->once()->andReturn('Y-m-d');
         $modelMock->shouldReceive('getCreatedAtColumn')->once()->andReturn('created_at');
@@ -43,7 +43,7 @@ class ConcreteEloquentBulkTest extends TestCase
     {
         $modelMock = Mockery::mock(Model::class);
 
-        $modelMock->shouldReceive('useTimestamps')->once()->andReturn(true);
+        $modelMock->shouldReceive('usesTimestamps')->once()->andReturn(true);
         $modelMock->shouldReceive('freshTimestamp')->once()->andReturn(new \DateTime('2020-05-10'));
         $modelMock->shouldReceive('getDateFormat')->once()->andReturn('Y-m-d');
         $modelMock->shouldReceive('getUpdatedAtColumn')->once()->andReturn('updated_at');
