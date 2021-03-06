@@ -89,7 +89,8 @@ dump(User::all());
 
 ### BulkProcessor
 
-`BulkProcessor` provides function without Eloquent features (auto resolving table names, and filling timestamp columns).
+`BulkProcessor` provides functions without Eloquent features (auto resolving table names, and filling timestamp columns).
+So you have to give the table name.
 
 ```php
 
