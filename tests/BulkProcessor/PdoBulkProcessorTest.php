@@ -25,7 +25,7 @@ class PdoBulkProcessorTest extends TestCase
             ->andReturn($statementMock);
 
         $builder = new PdoBulkProcessor($pdoMock);
-        $query = $builder->insert('tbl', ['name', 'age'], [['john', 22], ['james', 23]]);
+        $builder->insert('tbl', ['name', 'age'], [['john', 22], ['james', 23]]);
     }
 
     public function testInsertWithEmptyColumns()
@@ -65,7 +65,7 @@ class PdoBulkProcessorTest extends TestCase
             ->andReturn($statementMock);
 
         $builder = new PdoBulkProcessor($pdoMock);
-        $query = $builder->update('tbl', ['id'], [
+        $builder->update('tbl', ['id'], [
             [
                 'id' => 1,
                 'name' => 'john',
@@ -97,7 +97,7 @@ class PdoBulkProcessorTest extends TestCase
             ->andReturn($statementMock);
 
         $builder = new PdoBulkProcessor($pdoMock);
-        $query = $builder->update('tbl', ['id', 'name'], [
+        $builder->update('tbl', ['id', 'name'], [
             [
                 'id' => 1,
                 'name' => 'john',
@@ -125,7 +125,7 @@ class PdoBulkProcessorTest extends TestCase
             ->andReturn($statementMock);
 
         $builder = new PdoBulkProcessor($pdoMock);
-        $query = $builder->update('tbl', ['id'], [
+        $builder->update('tbl', ['id'], [
             [
                 'id' => 1,
                 'name' => 'john',
