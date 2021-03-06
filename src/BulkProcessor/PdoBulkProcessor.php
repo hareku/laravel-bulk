@@ -90,8 +90,9 @@ class PdoBulkProcessor implements BulkProcessor
                 }
                 $sql .= " THEN :key_{$recordKey}_column_{$column}";
             }
-            $sql .= ')';
+            $sql .= " ELSE `{$column}` END),";
         }
+        $sql = rtrim($sql, ',');
 
         foreach ($indices as $indexKey => $index) {
             $sql .= " WHERE `{$index}` IN (";

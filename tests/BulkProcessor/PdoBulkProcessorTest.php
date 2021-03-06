@@ -52,8 +52,8 @@ class PdoBulkProcessorTest extends TestCase
         $pdoMock->shouldReceive('prepare')
             ->with(
                 'UPDATE `tbl` SET'
-                . ' `name` = (CASE WHEN `id` = :key_0_index_0 THEN :key_0_column_name WHEN `id` = :key_1_index_0 THEN :key_1_column_name)'
-                . ' `age` = (CASE WHEN `id` = :key_0_index_0 THEN :key_0_column_age WHEN `id` = :key_1_index_0 THEN :key_1_column_age)'
+                . ' `name` = (CASE WHEN `id` = :key_0_index_0 THEN :key_0_column_name WHEN `id` = :key_1_index_0 THEN :key_1_column_name ELSE `name` END)'
+                . ', `age` = (CASE WHEN `id` = :key_0_index_0 THEN :key_0_column_age WHEN `id` = :key_1_index_0 THEN :key_1_column_age ELSE `age` END)'
                 . ' WHERE `id` IN (:key_0_index_0,:key_1_index_0);'
             )
             ->once()
