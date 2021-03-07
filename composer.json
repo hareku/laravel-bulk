@@ -9,6 +9,9 @@
       "email": "hareku908@gmail.com"
     }
   ],
+  "scripts": {
+    "test": "XDEBUG_MODE=coverage phpunit --coverage-text"
+  },
   "autoload": {
     "psr-4": {
       "Hareku\\Bulk\\": "src/"

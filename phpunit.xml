@@ -2,8 +2,12 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <coverage processUncoveredFiles="true">
     <include>
-      <directory suffix=".php">tests</directory>
+      <directory suffix=".php">src</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">src/Facades</directory>
+      <file>src/BulkServiceProvider.php</file>
+    </exclude>
   </coverage>
   <testsuites>
     <testsuite name="Unit">
