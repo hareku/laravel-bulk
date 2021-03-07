@@ -1,5 +1,7 @@
 # laravel-bulk
 
+[![testing](https://github.com/hareku/laravel-bulk/actions/workflows/testing.yml/badge.svg)](https://github.com/hareku/laravel-bulk/actions/workflows/testing.yml)
+
 `laravel-bulk` provides functions that execute bulk insert/update.
 
 Packagist: https://packagist.org/packages/hareku/laravel-bulk
