@@ -1,4 +1,10 @@
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">tests</directory>
+    </include>
+  </coverage>
   <testsuites>
     <testsuite name="Unit">
       <directory>tests</directory>
