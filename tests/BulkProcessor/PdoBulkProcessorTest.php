@@ -155,4 +155,22 @@ class PdoBulkProcessorTest extends TestCase
         $builder = new PdoBulkProcessor($pdoMock);
         $builder->update('tbl', ['name'], []);
     }
+
+    public function testUpdateWithNotArrayRecord()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->update('tbl', ['id'], [1]);
+    }
+
+    public function testUpdateWithRecordsThatDoesNotHaveIndex()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->update('tbl', ['id'], [['name' => 'john']]);
+    }
 }
