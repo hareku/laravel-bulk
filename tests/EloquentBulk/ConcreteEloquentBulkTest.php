@@ -8,6 +8,7 @@ use Hareku\Bulk\BulkProcessor\BulkProcessor;
 use Hareku\Bulk\EloquentBulk\ConcreteEloquentBulk;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Connection;
+use InvalidArgumentException;
 
 class ConcreteEloquentBulkTest extends TestCase
 {
@@ -37,6 +38,35 @@ class ConcreteEloquentBulkTest extends TestCase
 
         $bulk = new ConcreteEloquentBulk($procMock);
         $bulk->insert($modelMock, ['name', 'age'], [['john', 22], ['james', 23]]);
+    }
+
+    public function testInsertWithCreatedAtColumn()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $modelMock = Mockery::mock(Model::class);
+        $modelMock->shouldReceive('usesTimestamps')->once()->andReturn(true);
+        $modelMock->shouldReceive('getCreatedAtColumn')->once()->andReturn('created_at');
+
+        $procMock = Mockery::mock(BulkProcessor::class);
+
+        $bulk = new ConcreteEloquentBulk($procMock);
+        $bulk->insert($modelMock, ['name', 'created_at'], [['john', '2020-01-01']]);
+    }
+
+    public function testInsertWithUpdatedAtColumn()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $modelMock = Mockery::mock(Model::class);
+        $modelMock->shouldReceive('usesTimestamps')->once()->andReturn(true);
+        $modelMock->shouldReceive('getCreatedAtColumn')->once()->andReturn('created_at');
+        $modelMock->shouldReceive('getUpdatedAtColumn')->once()->andReturn('updated_at');
+
+        $procMock = Mockery::mock(BulkProcessor::class);
+
+        $bulk = new ConcreteEloquentBulk($procMock);
+        $bulk->insert($modelMock, ['name', 'updated_at'], [['john', '2020-01-01']]);
     }
 
     public function testUpdate()
