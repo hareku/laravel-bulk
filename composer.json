@@ -10,7 +10,9 @@
     }
   ],
   "scripts": {
-    "test": "XDEBUG_MODE=coverage phpunit --coverage-text"
+    "test": "phpunit",
+    "test:coverage-text": "XDEBUG_MODE=coverage phpunit --coverage-text",
+    "test:coverage-html": "XDEBUG_MODE=coverage phpunit --coverage-html ./.xdebug-coverage-html"
   },
   "autoload": {
     "psr-4": {

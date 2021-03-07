@@ -102,3 +102,15 @@ BulkProcessor::insert($tableName, $columns, $records);
 BulkProcessor::update($tableName, $indices, $records);
 
 ```
+
+## Contribution
+
+Please open an issue or a pull request.
+
+### Local development
+
+You can develop on VSCode remote container that already installed PHP and other dependencies. Otherwise, you have to install PHP and composer to the local, or run tests on Github Actions.
+
+- Install dependencies: `composer install`
+- Test with PHPUnit: `composer test`
+- Test with PHPUnit and Xdebug coverage: `composer test:coverage-text` or `composer test:coverage-html`
