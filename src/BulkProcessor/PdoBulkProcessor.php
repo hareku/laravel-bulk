@@ -69,7 +69,6 @@ class PdoBulkProcessor implements BulkProcessor
                 if(! array_key_exists($index, $record)) {
                     throw new InvalidArgumentException("A record must contain a given index `{$index}`.");
                 }
-                $valuesByIndex[$index][] = $record[$index];
             }
 
             foreach ($record as $column => $value) {
