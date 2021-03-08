@@ -24,11 +24,11 @@ class PdoBulkProcessor implements BulkProcessor
 
     public function insert(string $table, array $columns, array $records): void
     {
-        if(count($columns) == 0) {
+        if(count($columns) === 0) {
             throw new InvalidArgumentException('Columns must not be empty.');
         }
 
-        if(count($records) == 0) {
+        if(count($records) === 0) {
             return;
         }
 
@@ -51,11 +51,11 @@ class PdoBulkProcessor implements BulkProcessor
 
     public function update(string $table, array $indices, array $records): void
     {
-        if(count($indices) == 0) {
+        if(count($indices) === 0) {
             throw new InvalidArgumentException('Indices must not be empty.');
         }
 
-        if(count($records) == 0) {
+        if(count($records) === 0) {
             return;
         }
 
@@ -85,7 +85,7 @@ class PdoBulkProcessor implements BulkProcessor
             $sql .= " `{$column}` = (CASE";
             foreach ($valuesByRecordKey as $recordKey => $value) {
                 foreach ($indices as $indexKey => $index) {
-                    $sql .= $indexKey == 0 ? ' WHEN ' : ' AND ';
+                    $sql .= $indexKey === 0 ? ' WHEN ' : ' AND ';
                     $sql .= "`{$index}` = ?";
                     $params[] = $records[$recordKey][$index];
                 }
