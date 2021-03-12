@@ -43,6 +43,9 @@ class PdoBulkProcessor implements BulkProcessor
 
         $params = [];
         foreach ($records as $record) {
+            if(count($record) !== count($columns)) {
+                throw new InvalidArgumentException("A record should be the same size as the number of columns.");
+            }
             array_push($params, ...$record);
         }
 

@@ -46,6 +46,17 @@ class PdoBulkProcessorTest extends TestCase
         $builder->insert('tbl', ['name', 'age'], []);
     }
 
+    public function testInsertWithInvalidRecordSize()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $pdoMock = Mockery::mock(PDO::class);
+        $pdoMock->shouldReceive('prepare')->times(1);
+
+        $builder = new PdoBulkProcessor($pdoMock);
+        $builder->insert('tbl', ['name', 'age'], [['john', 22], ['james']]);
+    }
+
     public function testUpdate()
     {
         $statementMock = Mockery::mock(PDOStatement::class);
