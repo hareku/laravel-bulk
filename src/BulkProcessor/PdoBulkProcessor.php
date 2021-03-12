@@ -32,12 +32,13 @@ class PdoBulkProcessor implements BulkProcessor
             return;
         }
 
-        $sql = "INSERT INTO `{$table}`";
-        $sql .= ' (' . implode(',', $columns) . ')';
-
-        $valuesPlaceholder = '(' . rtrim(str_repeat('?,', count($records[0])), ',') . '),';
-        $sql .= ' VALUES ' . rtrim(str_repeat($valuesPlaceholder, count($records)), ',');
-        $sql .= ";";
+        $valuesPlaceholder = '(' . rtrim(str_repeat('?,', count($columns)), ',') . '),';
+        $sql = sprintf(
+            "INSERT INTO `%s` (%s) VALUES %s;",
+            $table,
+            implode(',', $columns),
+            rtrim(str_repeat($valuesPlaceholder, count($records)), ',')
+        );
 
         $statement = $this->pdo->prepare($sql);
 
