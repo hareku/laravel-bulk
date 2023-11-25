@@ -10,9 +10,6 @@ Packagist: https://packagist.org/packages/hareku/laravel-bulk
 
 Composer: `composer require hareku/laravel-bulk`.
 
-- Supporting Laravel version is `"^6.0|^7.0|^8.0"`.
-- Supporting PHP version is `"^7.3|^8.0"`.
-
 ## Usage
 
 ### EloquentBulk
